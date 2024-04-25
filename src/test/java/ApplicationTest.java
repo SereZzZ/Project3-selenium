@@ -1,4 +1,5 @@
 import dev.failsafe.internal.util.Assert;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,10 +16,9 @@ public class ApplicationTest {
     private WebDriver driver; //создаем драйвер на основе вебдрайвера
 
 
-    @BeforeAll    //общие настройки для всего класса с тестами
-    static void setUpAll() {
-        System.setProperty("webdriver.chrome.driver", "driver/win/chromedriver.exe");
-
+    @BeforeAll
+    public static void setupAll() {
+        WebDriverManager.chromedriver().setup();
     }
 
    /* @BeforeEach  //перед каждым тестом инициализируем в тестах драйвер хром и видим что происходит
