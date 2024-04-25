@@ -74,6 +74,6 @@ public class NegativeTest {
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Полина");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79969236311");
         driver.findElement(By.cssSelector("button[type='button']")).click();
-        assertEquals(true, driver.findElement(By.cssSelector("[data-test-id='agreement'].input_invalid")).isDisplayed());
+        assertTrue(driver.findElement(By.cssSelector("[data-test-id='agreement'].input_invalid")).isDisplayed());
     }
 }

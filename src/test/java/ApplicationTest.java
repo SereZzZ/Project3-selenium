@@ -36,7 +36,6 @@ public class ApplicationTest {
         driver = new ChromeDriver(options);
     }
 
-
    @AfterEach  // после каждого теста выйти и обнулить
     void tearDown() {
         driver.quit();
