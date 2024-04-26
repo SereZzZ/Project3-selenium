@@ -34,6 +34,7 @@ public class ApplicationTest {
         options.addArguments("--no-sandbox");
         options.addArguments("--headless");
         driver = new ChromeDriver(options);
+        driver.get("http://localhost:9999/");
     }
 
    @AfterEach  // после каждого теста выйти и обнулить
@@ -44,7 +45,6 @@ public class ApplicationTest {
 
     @Test
     void shouldBeSuccessfulForm() {
-        driver.get("http://localhost:9999/");
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Полина");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79969236311");
         driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();

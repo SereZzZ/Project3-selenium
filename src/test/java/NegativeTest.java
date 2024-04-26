@@ -26,6 +26,7 @@ public class NegativeTest {
         options.addArguments("--no-sandbox");
         options.addArguments("--headless");
         driver = new ChromeDriver(options);
+        driver.get("http://localhost:9999/");
     }
 
     @AfterEach
@@ -36,8 +37,6 @@ public class NegativeTest {
 
     @Test
     void shouldBeSuccessfulForm() {
-        driver.get("http://localhost:9999/");
-        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
         driver.findElement(By.cssSelector("button[type='button']")).click();
         String text = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText().trim();
         assertEquals("Поле обязательно для заполнения", text.trim());
@@ -46,7 +45,6 @@ public class NegativeTest {
 
     @Test
     void shouldBeFailedIncorrectPhoneInput() {
-        driver.get("http://localhost:9999/");
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Полина");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+7996923631111");
         driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
@@ -57,8 +55,41 @@ public class NegativeTest {
     }
 
     @Test
+    void inputPhoneShouldValidateLatin() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Полина");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("serezka");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button[type='button']")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText().trim();
+        assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.", text.trim());
+        driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).isDisplayed();
+    }
+
+    @Test
+    void inputPhoneShouldValidateChar() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Полина");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("!@#$%^&*()_");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button[type='button']")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText().trim();
+        assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.", text.trim());
+        driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).isDisplayed();
+    }
+
+    @Test
+    void  incomingPhoneShouldGiveAnErrorLessThan11() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Полина");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+7996923631");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button[type='button']")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText().trim();
+        assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.", text.trim());
+        driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).isDisplayed();
+
+    }
+
+    @Test
     void shouldBeFailedIncorrectNameInput() {
-        driver.get("http://localhost:9999/");
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Полина1314");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79969236311");
         driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
@@ -69,8 +100,29 @@ public class NegativeTest {
     }
 
     @Test
+    void inputNameShouldValidateLatin() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Polina");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79969236311");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button[type='button']")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText().trim();
+        assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.", text.trim());
+        driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).isDisplayed();
+    }
+
+    @Test
+    void inputNameShouldValidateChar() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("!@#$%^*()");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79969236311");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button[type='button']")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText().trim();
+        assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.", text.trim());
+        driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).isDisplayed();
+    }
+
+    @Test
     void shouldBeFailedIncorrectCheckboxUsed() {
-        driver.get("http://localhost:9999/");
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Полина");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79969236311");
         driver.findElement(By.cssSelector("button[type='button']")).click();
