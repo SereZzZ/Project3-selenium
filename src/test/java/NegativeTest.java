@@ -44,6 +44,27 @@ public class NegativeTest {
     }
 
     @Test
+    void shouldValidateEmptyInputPhone() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Полина");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button[type='button']")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText().trim();
+        assertEquals("Поле обязательно для заполнения", text.trim());
+        driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).isDisplayed();
+    }
+
+    @Test
+    void shouldValidateEmptyInputName() {
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79969236311");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button[type='button']")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText().trim();
+        assertEquals("Поле обязательно для заполнения", text.trim());
+        driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).isDisplayed();
+
+    }
+
+    @Test
     void shouldBeFailedIncorrectPhoneInput() {
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Полина");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+7996923631111");
